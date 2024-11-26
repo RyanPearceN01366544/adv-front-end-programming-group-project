@@ -8,9 +8,7 @@ export default function Games(){
     async function GamingAPI() {
         if (gameTitle.current.value !== '' && gameTitle.current.value !== ' '){            
             let title = gameTitle.current.value.replaceAll(' ', '+') // Replacing the search with '+' for URL.
-//            const response = await fetch(`https://www.cheapshark.com/api/1.0/games?title=${title}`)
-            //const response = await fetch('https://api.rawg.io/api/games/platforms?key=158f5d775b994d039796d401a20c9f08',{
-
+//            const response = await fetch(`https://www.cheapshark.com/api/1.0/games?title=${title}`) -- CheapShark (Decent Alternative without API Key.)
             // TODO: Change URL based on which fields have something inside of them.
             const response = await fetch(`https://api.rawg.io/api/games?key=158f5d775b994d039796d401a20c9f08&search=${title}`, {
                 method: "GET",

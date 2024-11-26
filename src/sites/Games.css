@@ -1,0 +1,30 @@
+.GamesComponent{
+    background-color: rgba(55, 55, 55, 255);
+    color: white;
+}
+
+.GamesSearchSection{
+
+}
+
+.GamesCards{
+    display:flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    padding: 1rem;
+    background-color: blue;
+    color: white;
+}
+
+.GameCard{
+    width: 30%;
+    height: auto;
+    border: 3px solid red;
+    margin-bottom: 20px;
+}
+
+.GameCardImage{
+    width: 75%;
+    height: auto;
+}

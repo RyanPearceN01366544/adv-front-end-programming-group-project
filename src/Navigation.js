@@ -5,11 +5,13 @@ import Music from './sites/Music'
 import Games from './sites/Games'
 import NotFound from './sites/NotFound'
 import './Navigation.css';
+import Books from './sites/Books';
 
 const HomeC = () => <Home/>
 const MoviesC = () => <Movies/>
 const MusicC = () => <Music/>
 const GamesC = () => <Games/>
+const BooksC = () => <Books/>
 const NotFoundC = () => <NotFound/>
 
 export default function Navigation() {
@@ -24,6 +26,7 @@ export default function Navigation() {
                     <Link to='/Movies'><button className="NavigationButton">Movies</button></Link>
                     <Link to='/Music'><button className="NavigationButton">Music</button></Link>
                     <Link to='/Games'><button className="NavigationButton">Games</button></Link>
+                    <Link to='/Books'><button className="NavigationButton">Books</button></Link>
                 </div>
             </nav>
             <Routes className='DefaultWebsiteStyle'>
@@ -31,6 +34,7 @@ export default function Navigation() {
                 <Route path='/Movies' element={<MoviesC/>}/>
                 <Route path='/Music' element={<MusicC/>}/>
                 <Route path='/Games' element={<GamesC/>}/>
+                <Route path='/Books' element={<BooksC/>}/>
                 <Route path='*' element={<NotFoundC/>}/>
             </Routes>
         </BrowserRouter>

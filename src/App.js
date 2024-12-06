@@ -54,4 +54,19 @@ function App() {
   );
 };
 
-  export default App;
+export default App;
+
+/*
+import './App.css';
+import Navigation from './Navigation';
+
+function App() {
+  return (
+    <div className="App">
+      <Navigation/>
+    </div>
+  );
+}
+
+export default App;
+*/

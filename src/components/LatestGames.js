@@ -2,7 +2,8 @@ import {useState, useEffect} from 'react';
 import {API_KEY} from '../sites/Games';
 
 export default function LatestGames({size = 4}){
-    let navigation = {previous: '', next: '', page_count: 0}; // Will Re-Add after website functionality is made.
+    const [latestNextWebsite, setLatestNextWebsite] = useState('');
+    const [latestPrevWebsite, setLatestPrevWebsite] = useState('');
     const [latestGamesWebsite, setLatestGamesWebsite] = useState(`https://api.rawg.io/api/games?key=${API_KEY}&ordering=-released&page_size=${size}`);
     const [latestGamesData, setLatestGamesData] = useState([]);
     // -- Search Variables
@@ -36,6 +37,7 @@ export default function LatestGames({size = 4}){
         console.log('Current Platform: ' + latestGamesPlatform);
         if (latestGamesPlatform !== -1){
             // The only reason why there is no title search with release is because results become very strange.
+            // For instance, I've searched up 'Batman' and it would give me the latest games that start with 'ba' or something similar.
             let temp = websiteN;
             websiteN = websiteN + "&platforms=" + latestGamesPlatform;
             console.log("-- Updated Website --\nFrom:\t" + temp + "\nTo:\t" + websiteN);
@@ -51,52 +53,31 @@ export default function LatestGames({size = 4}){
         const latestData = await fetch(latestGamesWebsite);
         const latestJson = await latestData.json();
         setLatestGamesData(latestJson['results']);
+        setLatestNextWebsite(latestJson['next']);
+        setLatestPrevWebsite(latestJson['previous']);
         
-        navigation = {
-            previous: latestJson['previous'], 
-            next: latestJson['next'], 
-            page_count: Math.ceil(latestJson['count'] / size)
-        };
-        
-        /*
         let nextButton = document.getElementById('NextPageButton');
         let prevButton = document.getElementById('PreviousPageButton');
 
         nextButton.hidden = true;
         prevButton.hidden = true;
-        if (navigation.next){ // If there is a site for next page then show next button.
+        if (latestNextWebsite){ // If there is a site for next page then show next button.
             nextButton.hidden = false;
         }
-        if (navigation.previous){ // If there is a site for previous page then show previous button.
+        if (latestPrevWebsite){ // If there is a site for previous page then show previous button.
             prevButton.hidden = false;
         }
-        */
     }
     function PreviousPage(){
-        console.log("Previous: " + navigation.previous);
-        setLatestGamesWebsite(navigation.previous);
+        console.log("Previous: " + latestPrevWebsite);
+        setLatestGamesWebsite(latestPrevWebsite);
         GetLatest();
     }
     function NextPage(){
-        console.log("Next: " + navigation.next);
-        setLatestGamesWebsite(navigation.next);
+        console.log("Next: " + latestNextWebsite);
+        setLatestGamesWebsite(latestNextWebsite);
         GetLatest();
     }
-
-    let temporary = [1, 7, 3, 4, 5]
-    //               0, 1, 2, 3, 4
-    let temporary2 = {
-        0: {
-            name: "Whatever",
-            title: "Whatever"
-        },
-        1: {
-            
-            name: "Whatever2",
-            title: "Whatever2"
-        }
-    }
-
 
     return(
         <div className="GamesComponent">
@@ -127,13 +108,10 @@ export default function LatestGames({size = 4}){
                 })
             }
             </div>
-
+            <div className='GamesSearch'>
+                <button onClick={PreviousPage} id='PreviousPageButton'>{'<'}</button>
+                <button onClick={NextPage} id='NextPageButton'>{'>'}</button>
+            </div>
         </div>
     )
-    /*
-    <div className='GamesSearch'>
-        <button onClick={PreviousPage} id='PreviousPageButton'>{'<'}</button>
-        <button onClick={NextPage} id='NextPageButton'>{'>'}</button>
-    </div>
-    */
 }

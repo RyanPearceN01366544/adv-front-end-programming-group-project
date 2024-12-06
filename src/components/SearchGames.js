@@ -2,7 +2,8 @@ import {useState, useEffect} from 'react';
 import {API_KEY} from '../sites/Games';
 
 function SearchGames({size = 4}){
-    // let navigation = {previous: '', next: '', page_count: 0};
+    const [searchNextWebsite, setSearchNextWebsite] = useState('');
+    const [searchPrevWebsite, setSearchPrevWebsite] = useState('');
     const [searchGamesWebsite, setSearchGamesWebsite] = useState(`https://api.rawg.io/api/games?key=${API_KEY}&page_size=${size}`);
     const [searchGamesData, setSearchGamesData] = useState([]);
     // -- Search Variables --
@@ -58,13 +59,28 @@ function SearchGames({size = 4}){
         const searchJson = await searchData.json();
         setSearchGamesData(searchJson['results']);
         console.log('Search Games Data Updated!');
-        /*
-        navigation = {
-            previous: searchJson['previous'], 
-            next: searchJson['next'], 
-            page_count: Math.ceil(searchJson['count'] / size)
-        };
-        */
+
+        let nextButton = document.getElementById('NextPageButton');
+        let prevButton = document.getElementById('PreviousPageButton');
+
+        nextButton.hidden = true;
+        prevButton.hidden = true;
+        if (searchNextWebsite){ // If there is a site for next page then show next button.
+            nextButton.hidden = false;
+        }
+        if (searchPrevWebsite){ // If there is a site for previous page then show previous button.
+            prevButton.hidden = false;
+        }
+    }
+    function PreviousPage(){
+        console.log("Previous: " + searchPrevWebsite);
+        setSearchGamesWebsite(searchPrevWebsite);
+        GetSearch();
+    }
+    function NextPage(){
+        console.log("Next: " + searchNextWebsite);
+        setSearchGamesWebsite(searchNextWebsite);
+        GetSearch();
     }
 
 
@@ -97,6 +113,10 @@ function SearchGames({size = 4}){
                     )
                 })
             }
+            </div>
+            <div className='GamesSearch'>
+                <button onClick={PreviousPage} id='PreviousPageButton'>{'<'}</button>
+                <button onClick={NextPage} id='NextPageButton'>{'>'}</button>
             </div>
         </div>
     )

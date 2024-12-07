@@ -1,0 +1,91 @@
+.music-container {
+    background-image: url('../images/unsplash.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: white;
+    text-shadow: 0px 0px 5px rgba(0, 0, 0, 0.7);
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.music-hero {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.search-bar {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.search-bar input {
+    width: 300px;
+    padding: 10px;
+    font-size: 16px;
+    color: #333; /* A darker text color */
+    background-color: rgba(166, 215, 225, 0.8); /* Light background */
+    border: 1px solid #cfd;
+    border-radius: 5px;
+}
+
+.search-bar button {
+    padding: 10px 20px;
+    margin-left: 10px;
+    background: #ff5a5f;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
+.music-genres {
+    margin-top: 20px;
+}
+
+.genres-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.genre-card {
+    width: 150px;
+    height: 150px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    background-size: cover;
+    background-position: center;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    text-shadow: 0px 0px 5px rgba(0, 0, 0, 0.7);
+    padding: 10px;
+}
+
+.music-tracks,
+.now-playing {
+    margin-top: 20px;
+}
+
+.tracks-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.track-card {
+    width: 150px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.track-card img {
+    width: 100%;
+    border-radius: 10px;
+}
+
+.now-playing-card {
+    text-align: center;
+}

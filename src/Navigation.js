@@ -15,11 +15,14 @@ const BooksC = () => <Books/>
 const NotFoundC = () => <NotFound/>
 
 export default function Navigation() {
+    document.title = "R.A.D.S"
+    // Please Note: The Navigation Bar is temporarily simplistic.
+    // The navigation bar will look nicer, darker and closed up in comparison.
     return(
         <BrowserRouter>
             <nav className="Navigation">
                 <div className='NavigationTitle'>
-                    <h1>Temporary Title Name!</h1>
+                    <h1>R.A.D.S</h1>
                 </div>
                 <div className='NavigationButtonsDiv'>
                     <Link to='/'><button className="NavigationButton">Home</button></Link>

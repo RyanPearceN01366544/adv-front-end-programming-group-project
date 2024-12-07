@@ -2,7 +2,6 @@ import {useState, useEffect} from 'react';
 import {API_KEY} from '../sites/Games';
 
 export default function LatestGames({size = 4}){
-    let navigation = {previous: '', next: '', page_count: 0}; // Will Re-Add after website functionality is made.
     const [latestGamesWebsite, setLatestGamesWebsite] = useState(`https://api.rawg.io/api/games?key=${API_KEY}&ordering=-released&page_size=${size}`);
     const [latestGamesData, setLatestGamesData] = useState([]);
     // -- Search Variables
@@ -13,6 +12,9 @@ export default function LatestGames({size = 4}){
         setLatestGamesPlatform(temporary);
         GetLatest();
     }
+    const [firstTimeLoading, setFirstTimeLoading] = useState(true); // Temporary Fix to Strange Buttons
+    const [latestNextWebsite, setLatestNextWebsite] = useState('');
+    const [latestPrevWebsite, setLatestPrevWebsite] = useState('');
     useEffect(() => {
         console.log("Platform: " + latestGamesPlatform);
         HandleWebsite();
@@ -36,6 +38,7 @@ export default function LatestGames({size = 4}){
         console.log('Current Platform: ' + latestGamesPlatform);
         if (latestGamesPlatform !== -1){
             // The only reason why there is no title search with release is because results become very strange.
+            // For instance, I've searched up 'Batman' and it would give me the latest games that start with 'ba' or something similar.
             let temp = websiteN;
             websiteN = websiteN + "&platforms=" + latestGamesPlatform;
             console.log("-- Updated Website --\nFrom:\t" + temp + "\nTo:\t" + websiteN);
@@ -51,58 +54,37 @@ export default function LatestGames({size = 4}){
         const latestData = await fetch(latestGamesWebsite);
         const latestJson = await latestData.json();
         setLatestGamesData(latestJson['results']);
+        setLatestNextWebsite(latestJson['next']);
+        setLatestPrevWebsite(latestJson['previous']);
         
-        navigation = {
-            previous: latestJson['previous'], 
-            next: latestJson['next'], 
-            page_count: Math.ceil(latestJson['count'] / size)
-        };
-        
-        /*
         let nextButton = document.getElementById('NextPageButton');
         let prevButton = document.getElementById('PreviousPageButton');
 
         nextButton.hidden = true;
         prevButton.hidden = true;
-        if (navigation.next){ // If there is a site for next page then show next button.
+        if (latestJson['next']){ // If there is a site for next page then show next button.
             nextButton.hidden = false;
         }
-        if (navigation.previous){ // If there is a site for previous page then show previous button.
+        if (latestJson['previous']){ // If there is a site for previous page then show previous button.
             prevButton.hidden = false;
         }
-        */
     }
     function PreviousPage(){
-        console.log("Previous: " + navigation.previous);
-        setLatestGamesWebsite(navigation.previous);
+        console.log("Previous: " + latestPrevWebsite);
+        setLatestGamesWebsite(latestPrevWebsite);
         GetLatest();
     }
     function NextPage(){
-        console.log("Next: " + navigation.next);
-        setLatestGamesWebsite(navigation.next);
+        console.log("Next: " + latestNextWebsite);
+        setLatestGamesWebsite(latestNextWebsite);
         GetLatest();
     }
-
-    let temporary = [1, 7, 3, 4, 5]
-    //               0, 1, 2, 3, 4
-    let temporary2 = {
-        0: {
-            name: "Whatever",
-            title: "Whatever"
-        },
-        1: {
-            
-            name: "Whatever2",
-            title: "Whatever2"
-        }
-    }
-
 
     return(
         <div className="GamesComponent">
             <h1>Latest Games</h1>
             <div className="GamesSearch">
-                <select name='platforms' id='platforms' onChange={HandleLatestGamesPlatformChange}>
+                <select name='platforms' id='platforms' className='bg-gray-400 rounded-sm text-center mr-1 h-6' onChange={HandleLatestGamesPlatformChange}>
                     <option value={-1}>All Platforms</option>
                     {
                         platforms.map((todo) => {
@@ -112,7 +94,7 @@ export default function LatestGames({size = 4}){
                         })
                     }
                 </select>
-                <button onClick={GetLatest}>Search</button>
+                <button onClick={GetLatest} className='bg-gray-500 rounded-sm border-s-4 border-gray-400 h-6 px-2 text-center'>Search</button>
             </div>
             <div className="GamesCards">
             {
@@ -121,19 +103,16 @@ export default function LatestGames({size = 4}){
                         <div className="GameCard">
                             <h2 className="GameCardTitle">{todo.name}</h2>
                             <h3 className="GameCardReleaseDate">{todo.released}</h3>
-                            <img className="GameCardImage" src={todo.background_image} alt='GameImg'/>
+                            <img className="GameCardImage self-center" src={todo.background_image} alt='GameImg'/>
                         </div>
                     )
                 })
             }
             </div>
-
+            <div className='GamesSearch'>
+                <button onClick={PreviousPage} id='PreviousPageButton' className='GamePageButton rounded px-1 mr-1'>{'<'}</button>
+                <button onClick={NextPage} id='NextPageButton' className='GamePageButton rounded px-1'>{'>'}</button>
+            </div>
         </div>
     )
-    /*
-    <div className='GamesSearch'>
-        <button onClick={PreviousPage} id='PreviousPageButton'>{'<'}</button>
-        <button onClick={NextPage} id='NextPageButton'>{'>'}</button>
-    </div>
-    */
 }

@@ -4,7 +4,7 @@ function SearchDevelopers(){
 
     return(
         <div>
-            
+            Temporary
         </div>
     )
 }

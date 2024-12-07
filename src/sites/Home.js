@@ -17,11 +17,11 @@ export default function Home(){
                 <p>Shajay Cockrane - Movies</p>
                 <p>Ryan Pearce - Games</p>
             </div>
-            <p className='my-10'>
+            <p className='my-10 text-wrap'>
                 The only heads up I wanted you to note about Games is that I went with this sort of media as I was unaware how difficult it would be to get one as I kept finding myself at road-blocks.
                 So I worked on the API first and are still working on it for now.
                 The search function at the bottom of the page works but only the latest section's buttons for going to the next and previous page are working, though, you need to double click on the button to go to the next page.
-                Thanks and sorry again!
+                Lastly, I plan on making these two individual components into one but that will be for the future. Thanks! - Ryan
             </p>
         </div>
     )

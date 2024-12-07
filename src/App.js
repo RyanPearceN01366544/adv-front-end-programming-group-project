@@ -3,11 +3,10 @@ import Navigation from './Navigation';
 
 function App() {
   return (
-    <div className="App">
+    <div className='App'>
       <Navigation/>
     </div>
   );
-}
+};
 
 export default App;
-

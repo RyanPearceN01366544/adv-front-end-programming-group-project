@@ -1,0 +1,71 @@
+.GamesComponent{
+    --dark1: rgb(115,115,115);
+    --dark2: rgb(100, 100, 100);
+    --dark3: rgb(75, 75, 75);
+    --dark4: rgb(50, 50, 50);
+    --dark5: rgb(40, 40, 40);
+    --dark6: rgb(30, 30, 30);
+    background-color: var(--dark6);
+    color: white;
+    padding: 1rem;
+}
+
+.GamesSearch{
+    margin: 1rem;
+    border: 5px solid var(--dark4);
+}
+
+.GamesCards{
+    display:flex;
+    flex-flow: row wrap;
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: space-evenly;
+    width: 90%;
+    margin-top: 1rem;
+    margin-bottom: auto;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    background-color: var(--dark4);
+    border: 5px solid var(--dark2);
+    color: white;
+}
+.GameCard{
+    display: flex;
+    flex-flow: column;
+    column-count: 1;
+    column-gap: 1rem;
+    justify-content: center;
+    width: 100%;
+    height: auto;
+    border: 3px solid var(--dark2);
+    margin-bottom: 1rem;
+}
+.GameCardImage{
+    width: 75%;
+    height: auto;
+    margin: auto;
+    border: 5px solid var(--dark1);
+    margin-bottom: 0.5rem;
+}
+
+@media (min-width: 600px){
+    .GameCard{
+        width: 40%;
+    }
+}
+@media (min-width: 800px) {
+    .GameCard{
+        width: 30%;
+    }
+}
+@media (min-width: 1200px) {
+    .GameCard{
+        width: 20%;
+    }
+}
+
+.test {
+    color: black;
+    background-color: white;
+}

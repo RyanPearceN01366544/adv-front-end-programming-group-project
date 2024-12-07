@@ -2,8 +2,6 @@ import {useState, useEffect} from 'react';
 import {API_KEY} from '../sites/Games';
 
 export default function LatestGames({size = 4}){
-    const [latestNextWebsite, setLatestNextWebsite] = useState('');
-    const [latestPrevWebsite, setLatestPrevWebsite] = useState('');
     const [latestGamesWebsite, setLatestGamesWebsite] = useState(`https://api.rawg.io/api/games?key=${API_KEY}&ordering=-released&page_size=${size}`);
     const [latestGamesData, setLatestGamesData] = useState([]);
     // -- Search Variables
@@ -14,6 +12,9 @@ export default function LatestGames({size = 4}){
         setLatestGamesPlatform(temporary);
         GetLatest();
     }
+    const [firstTimeLoading, setFirstTimeLoading] = useState(true); // Temporary Fix to Strange Buttons
+    const [latestNextWebsite, setLatestNextWebsite] = useState('');
+    const [latestPrevWebsite, setLatestPrevWebsite] = useState('');
     useEffect(() => {
         console.log("Platform: " + latestGamesPlatform);
         HandleWebsite();
@@ -61,10 +62,10 @@ export default function LatestGames({size = 4}){
 
         nextButton.hidden = true;
         prevButton.hidden = true;
-        if (latestNextWebsite){ // If there is a site for next page then show next button.
+        if (latestJson['next']){ // If there is a site for next page then show next button.
             nextButton.hidden = false;
         }
-        if (latestPrevWebsite){ // If there is a site for previous page then show previous button.
+        if (latestJson['previous']){ // If there is a site for previous page then show previous button.
             prevButton.hidden = false;
         }
     }
@@ -83,7 +84,7 @@ export default function LatestGames({size = 4}){
         <div className="GamesComponent">
             <h1>Latest Games</h1>
             <div className="GamesSearch">
-                <select name='platforms' id='platforms' onChange={HandleLatestGamesPlatformChange}>
+                <select name='platforms' id='platforms' className='bg-gray-400 rounded-sm text-center mr-1 h-6' onChange={HandleLatestGamesPlatformChange}>
                     <option value={-1}>All Platforms</option>
                     {
                         platforms.map((todo) => {
@@ -93,7 +94,7 @@ export default function LatestGames({size = 4}){
                         })
                     }
                 </select>
-                <button onClick={GetLatest}>Search</button>
+                <button onClick={GetLatest} className='bg-gray-500 rounded-sm border-s-4 border-gray-400 h-6 px-2 text-center'>Search</button>
             </div>
             <div className="GamesCards">
             {
@@ -102,15 +103,15 @@ export default function LatestGames({size = 4}){
                         <div className="GameCard">
                             <h2 className="GameCardTitle">{todo.name}</h2>
                             <h3 className="GameCardReleaseDate">{todo.released}</h3>
-                            <img className="GameCardImage" src={todo.background_image} alt='GameImg'/>
+                            <img className="GameCardImage self-center" src={todo.background_image} alt='GameImg'/>
                         </div>
                     )
                 })
             }
             </div>
             <div className='GamesSearch'>
-                <button onClick={PreviousPage} id='PreviousPageButton'>{'<'}</button>
-                <button onClick={NextPage} id='NextPageButton'>{'>'}</button>
+                <button onClick={PreviousPage} id='PreviousPageButton' className='GamePageButton rounded px-1 mr-1'>{'<'}</button>
+                <button onClick={NextPage} id='NextPageButton' className='GamePageButton rounded px-1'>{'>'}</button>
             </div>
         </div>
     )

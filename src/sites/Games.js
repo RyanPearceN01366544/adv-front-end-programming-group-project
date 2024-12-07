@@ -5,15 +5,12 @@ import './Games.css'
 
 // -- Used for Components!
 export const API_KEY = '158f5d775b994d039796d401a20c9f08';
-export function GetKey(){
-    return API_KEY;
-};
 
 function Games(){
     return(
         <div>
             <LatestGames></LatestGames>
-            <SearchGames size={10}></SearchGames>
+            <SearchGames size={8}></SearchGames>
             <SearchDevelopers></SearchDevelopers>
         </div>
     )

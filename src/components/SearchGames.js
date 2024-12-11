@@ -1,5 +1,5 @@
 import {useState, useEffect} from 'react';
-import {API_KEY} from '../sites/Games';
+import {API_KEY, MISSING_IMAGE} from '../sites/Games';
 
 function SearchGames({size = 4}){
     // Using a normal variable as the website updates slow.
@@ -48,7 +48,6 @@ function SearchGames({size = 4}){
 
     function HandleWebsite(){
         let websiteN = `https://api.rawg.io/api/games?key=${API_KEY}&page_size=${size}`;
-
         if (searchGamesPage < 1) {
             setSearchGamesPage(1);            
         }
@@ -78,12 +77,19 @@ function SearchGames({size = 4}){
         setSearchGamesMaxPage(Math.ceil(searchJson['count'] / size)); // The count is how many games are in the list, so I can divide it by the size (the amount of games that appear) to get the number of pages.
         CheckPageButtons();
     }
-    function OnClickSubmit(){
-        setSearchGamesPage(1);
-        GetSearch();
+
+    // -- INPUT FUNCTIONS --
+    const OnSearchInputKeyUp = (event) => { // Adds functionality by making it submit on enter when interacting with the title search input.
+        if (event.key === 'Enter'){ // Gets the key that was let go in the event.
+            OnClickSubmit(); // Emulates submitting.
+        }
+    }
+    function OnClickSubmit() { // Found out recently that I probably could've used a form but it's a bit too late for that now. 
+        setSearchGamesPage(1); // Regardless, this function simply resets the page back to 1.
+        GetSearch(); // Then refreshes the list of games.
     }
 
-
+    
     function PreviousPage(){
         if (searchGamesPage !== 1) {
             setSearchGamesPage(searchGamesPage - 1);
@@ -99,25 +105,28 @@ function SearchGames({size = 4}){
     function CheckPageButtons(){
         let nextButton = document.getElementById('SearchNextPageButton');
         let prevButton = document.getElementById('SearchPrevPageButton');
-        searchGamesPageR = searchGamesPage;
-        searchGamesMaxPageR = searchGamesMaxPage;
 
-        prevButton.hidden = false;
-        nextButton.hidden = false;
-        if (searchGamesPageR === 1){
-            prevButton.hidden = true;
-        }
-        else if (searchGamesPageR === searchGamesMaxPageR){
-            nextButton.hidden = true;
+        if (window.location.pathname == '/Games'){ // Adding this to hopefully stop website from returning an error randomly when switching sites.
+            searchGamesPageR = searchGamesPage;
+            searchGamesMaxPageR = searchGamesMaxPage;
+
+            prevButton.hidden = false;
+            nextButton.hidden = false;
+            if (searchGamesPageR === 1){
+                prevButton.hidden = true;
+            }
+            else if (searchGamesPageR === searchGamesMaxPageR){
+                nextButton.hidden = true;
+            }
         }
     }
 
 
     return(
         <div className="GamesComponent border-2 border-gray-500 mx-5">
-            <h1>Search Games</h1>
+            <u className="GamesComponentTitle">Search Games</u>
             <div className="GamesSearch">
-                <input type='text' name='gameSearchTitle' className='GamesSearchTitle rounded mr-1 h-6 border-solid border-2 border-gray-400' value={searchGamesTitle} onChange={HandleSearchGamesTitleChange}/>
+                <input type='text' name='gameSearchTitle' value={searchGamesTitle} onChange={HandleSearchGamesTitleChange} onKeyUp={OnSearchInputKeyUp} id='GamesSearchInputField' className='GamesSearchTitle bg-gray-400 rounded mr-1 h-6 border-solid border-2 border-gray-400'/>
                 <select name='platforms' id='platforms' className='bg-gray-400 rounded-sm text-center mr-1 h-6' onChange={HandleSearchGamesPlatformChange}>
                     <option value={-1}>All Platforms</option>
                     {
@@ -135,9 +144,9 @@ function SearchGames({size = 4}){
                 searchGamesData.map((todo) => {
                     return(
                         <div className="GameCard">
-                            <h2 className="GameCardTitle">{todo.name}</h2>
-                            <h3 className="GameCardReleaseDate">{todo.released}</h3>
-                            <img className="GameCardImage self-center" src={todo.background_image} alt='GameImg'/>
+                            <u className="GameCardTitle">{todo.name}</u>
+                            <h3 className="GameCardReleaseDate">Release Date: {todo.released}</h3>
+                            <img className="GameCardImage self-center" src={todo.background_image ? todo.background_image : MISSING_IMAGE}/>
                         </div>
                     )
                 })

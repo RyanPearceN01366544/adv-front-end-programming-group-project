@@ -6,6 +6,7 @@ import './Games.css'
 
 // -- Used for Components!
 export const API_KEY = '158f5d775b994d039796d401a20c9f08';
+export const MISSING_IMAGE = 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Icon-round-Question_mark.svg/1200px-Icon-round-Question_mark.svg.png';
 
 function Games(){
     // For Original Application, Use This!

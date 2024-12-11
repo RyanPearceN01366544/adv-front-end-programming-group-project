@@ -1,5 +1,5 @@
 import {useState, useEffect} from 'react';
-import {API_KEY} from '../sites/Games';
+import {API_KEY, MISSING_IMAGE} from '../sites/Games';
 
 function SearchDevelopers({size = 9}){
     // Using a normal variable as the website updates slow.
@@ -57,6 +57,12 @@ function SearchDevelopers({size = 9}){
         setSearchGamesMaxPage(Math.ceil(searchJson['count'] / size)); // The count is how many games are in the list, so I can divide it by the size (the amount of games that appear) to get the number of pages.
         CheckPageButtons();
     }
+    
+    const OnSearchInputKeyUp = (event) => { // Adds functionality by making it submit on enter when interacting with the title search input.
+        if (event.key === 'Enter'){ // Gets the key that was let go in the event.
+            OnClickSubmit(); // Emulates submitting.
+        }
+    }
     function OnClickSubmit(){
         setDevelopersPage(1);
         GetDevelopers();
@@ -78,25 +84,27 @@ function SearchDevelopers({size = 9}){
     function CheckPageButtons(){
         let nextButton = document.getElementById('DevelopersNextPageButton');
         let prevButton = document.getElementById('DevelopersPrevPageButton');
-        developersGamesPageR = developersGamesPage;
-        developersGamesMaxPageR = developersGamesMaxPage;
+        if (window.location.pathname == '/Games'){ // Adding this to hopefully stop website from returning an error randomly when switching sites.
+            developersGamesPageR = developersGamesPage;
+            developersGamesMaxPageR = developersGamesMaxPage;
 
-        prevButton.hidden = false;
-        nextButton.hidden = false;
-        if (developersGamesPageR === 1){
-            prevButton.hidden = true;
-        }
-        else if (developersGamesPageR === developersGamesMaxPageR){
-            nextButton.hidden = true;
+            prevButton.hidden = false;
+            nextButton.hidden = false;
+            if (developersGamesPageR === 1){
+                prevButton.hidden = true;
+            }
+            else if (developersGamesPageR === developersGamesMaxPageR){
+                nextButton.hidden = true;
+            }
         }
     }
 
 
     return(
         <div className="GamesComponent border-2 border-gray-500 mx-5">
-            <h1>Search Games</h1>
+            <u className="GamesComponentTitle">Game Developers</u>
             <div className="GamesSearch">
-                <input type='text' name='gameSearchTitle' className='GamesSearchTitle rounded mr-1 h-6 border-solid border-2 border-gray-400' value={developersSearchTitle} onChange={HandleDevelopersSearchTitleChange}/>
+                <input type='text' name='gameSearchTitle' className='GamesSearchTitle rounded mr-1 h-6 border-solid border-2 border-gray-400' value={developersSearchTitle} onChange={HandleDevelopersSearchTitleChange} onKeyUp={OnSearchInputKeyUp}/>
                 <button onClick={OnClickSubmit} className='bg-gray-500 rounded-sm border-s-4 border-gray-400 h-6 px-2 text-center'>Search</button>
             </div>
             <div className="GamesCards">
@@ -105,7 +113,7 @@ function SearchDevelopers({size = 9}){
                     return(
                         <div className="GameCard">
                             <h2 className="GameCardTitle">{todo.name}</h2>
-                            <img className="GameCardImage self-center" src={todo.image_background} alt='GameImg'/>
+                            <img className="GameCardImage self-center" src={todo.image_background ? todo.image_background : MISSING_IMAGE} alt='GameImg'/>
                         </div>
                     )
                 })

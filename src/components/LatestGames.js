@@ -1,5 +1,5 @@
 import {useState, useEffect} from 'react';
-import {API_KEY} from '../sites/Games';
+import {API_KEY, MISSING_IMAGE} from '../sites/Games';
 
 function LatestGames({size = 4}){
     // Using a normal variable as the website updates slow.
@@ -88,23 +88,25 @@ function LatestGames({size = 4}){
     function CheckPageButtons(){
         let nextButton = document.getElementById('LatestNextPageButton');
         let prevButton = document.getElementById('LatestPrevPageButton');
-        latestGamesPageR = latestGamesPage;
-        latestGamesMaxPageR = latestGamesMaxPage;
+        if (window.location.pathname == '/Games'){ // Adding this to hopefully stop website from returning an error randomly when switching sites.
+            latestGamesPageR = latestGamesPage;
+            latestGamesMaxPageR = latestGamesMaxPage;
 
-        prevButton.hidden = false;
-        nextButton.hidden = false;
-        if (latestGamesPageR === 1){
-            prevButton.hidden = true;
-        }
-        else if (latestGamesPageR === latestGamesMaxPageR){
-            nextButton.hidden = true;
+            prevButton.hidden = false;
+            nextButton.hidden = false;
+            if (latestGamesPageR === 1){
+                prevButton.hidden = true;
+            }
+            else if (latestGamesPageR === latestGamesMaxPageR){
+                nextButton.hidden = true;
+            }
         }
     }
 
 
     return(
         <div className="GamesComponent border-2 border-gray-500 mx-5 mb-4">
-            <h1>Search Games</h1>
+            <u className="GamesComponentTitle">Latest Games</u>
             <div className="GamesSearch">
                 <select name='platforms' id='platforms' className='bg-gray-400 rounded-sm text-center mr-1 h-6' onChange={HandleLatestGamesPlatformChange}>
                     <option value={-1}>All Platforms</option>
@@ -123,9 +125,9 @@ function LatestGames({size = 4}){
                 latestGamesData.map((todo) => {
                     return(
                         <div className="GameCard">
-                            <h2 className="GameCardTitle">{todo.name}</h2>
-                            <h3 className="GameCardReleaseDate">{todo.released}</h3>
-                            <img className="GameCardImage self-center" src={todo.background_image} alt='GameImg'/>
+                            <u className="GameCardTitle">{todo.name}</u>
+                            <h3 className="GameCardReleaseDate">Release Date: {todo.tba === false ? todo.released : 'To Be Announced!'}</h3>
+                            <img className="GameCardImage self-center" src={todo.background_image ? todo.background_image : MISSING_IMAGE}/>
                         </div>
                     )
                 })

@@ -46,7 +46,13 @@
     height: auto;
     margin: auto;
     border: 5px solid var(--dark1);
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+.GamesSearchTitle{
+    color: black;
+}
+.GamesPageButton{
+    color: black;
 }
 
 @media (min-width: 600px){
@@ -63,9 +69,4 @@
     .GameCard{
         width: 20%;
     }
-}
-
-.test {
-    color: black;
-    background-color: white;
 }

@@ -2,9 +2,8 @@ import {useState, useEffect} from 'react';
 import {API_KEY} from '../sites/Games';
 
 function SearchGames({size = 4}){
-    const [searchNextWebsite, setSearchNextWebsite] = useState('');
-    const [searchPrevWebsite, setSearchPrevWebsite] = useState('');
-    const [searchGamesWebsite, setSearchGamesWebsite] = useState(`https://api.rawg.io/api/games?key=${API_KEY}&page_size=${size}`);
+    // Using a normal variable as the website updates slow.
+    let searchWebsite = `https://api.rawg.io/api/games?key=${API_KEY}&page_size=${size}`;
     const [searchGamesData, setSearchGamesData] = useState([]);
     // -- Search Variables --
     const [searchGamesTitle, setSearchGamesTitle] = useState('');
@@ -16,12 +15,16 @@ function SearchGames({size = 4}){
     function HandleSearchGamesPlatformChange(event){
         setSearchGamesPlatform(event.target.value);
     }
+    let searchGamesPageR = -1; // This is what controls if next is hidden or not as useState seems a bit behind.
+    const [searchGamesPage, setSearchGamesPage] = useState(1);
+    let searchGamesMaxPageR = -1; // This is what controls if next is hidden or not as useState seems a bit behind.
+    const [searchGamesMaxPage, setSearchGamesMaxPage] = useState(-1);
 
     // Initial Effect
     useEffect(() => { // Placing here as this is what the site will do first when refreshed/loaded!
         GetPlatforms();
         GetSearch();
-    }, []);
+    }, [true]);
     // Title Effect
     useEffect(() => {
         HandleWebsite();
@@ -30,6 +33,11 @@ function SearchGames({size = 4}){
     useEffect(() => {
         HandleWebsite();
     }, [searchGamesPlatform]);
+    // Page Effect
+    useEffect(() => {
+        HandleWebsite();
+        GetSearch();
+    }, [searchGamesPage])
 
     async function GetPlatforms(){
         const platformsData = await fetch(`https://api.rawg.io/api/platforms?key=${API_KEY}`);
@@ -37,59 +45,80 @@ function SearchGames({size = 4}){
         setPlatforms(platformsJson['results']);
     }
 
+
     function HandleWebsite(){
         let websiteN = `https://api.rawg.io/api/games?key=${API_KEY}&page_size=${size}`;
-        if (searchGamesTitle !== ''){
-            websiteN = `${websiteN}&search=${searchGamesTitle}`;
+
+        if (searchGamesPage < 1) {
+            setSearchGamesPage(1);            
         }
-        if (searchGamesPlatform && searchGamesPlatform !== -1){
+
+        let page = searchGamesPage;
+        if (page){
+            websiteN = `${websiteN}&page=${page}`;
+        }
+        if (searchGamesPlatform && searchGamesPlatform !== -1) {
             websiteN = `${websiteN}&platforms=${searchGamesPlatform}`;
         }
-        setSearchGamesWebsite(websiteN);
-        console.log('Got Search Website: "' + searchGamesWebsite + '"');
+        if (searchGamesTitle !== '') {
+            let titleFixed = searchGamesTitle.replaceAll(' ', '+');
+            websiteN = `${websiteN}&search=${titleFixed}`;
+        }
+        searchWebsite = websiteN;
     }
-
-    async function GetSearch(){
-        if (!searchGamesWebsite || searchGamesWebsite === ''){
+    async function GetSearch(doubleCheck_ = false){
+        if (!searchWebsite || searchWebsite === ''){
             GetPlatforms();
             HandleWebsite();
         }
         // -- Grabbing Game Data
-        const searchData = await fetch(searchGamesWebsite);
+        const searchData = await fetch(searchWebsite);
         const searchJson = await searchData.json();
         setSearchGamesData(searchJson['results']);
-        console.log('Search Games Data Updated!');
-
-        let nextButton = document.getElementById('NextPageButton');
-        let prevButton = document.getElementById('PreviousPageButton');
-
-        nextButton.hidden = true;
-        prevButton.hidden = true;
-        if (searchNextWebsite){ // If there is a site for next page then show next button.
-            nextButton.hidden = false;
-        }
-        if (searchPrevWebsite){ // If there is a site for previous page then show previous button.
-            prevButton.hidden = false;
-        }
+        setSearchGamesMaxPage(Math.ceil(searchJson['count'] / size)); // The count is how many games are in the list, so I can divide it by the size (the amount of games that appear) to get the number of pages.
+        CheckPageButtons();
     }
-    function PreviousPage(){
-        console.log("Previous: " + searchPrevWebsite);
-        setSearchGamesWebsite(searchPrevWebsite);
+    function OnClickSubmit(){
+        setSearchGamesPage(1);
         GetSearch();
+    }
+
+
+    function PreviousPage(){
+        if (searchGamesPage !== 1) {
+            setSearchGamesPage(searchGamesPage - 1);
+        }
+        CheckPageButtons();
     }
     function NextPage(){
-        console.log("Next: " + searchNextWebsite);
-        setSearchGamesWebsite(searchNextWebsite);
-        GetSearch();
+        if (searchGamesPage < searchGamesMaxPage) {
+            setSearchGamesPage(searchGamesPage + 1);
+        }
+        CheckPageButtons();
+    }
+    function CheckPageButtons(){
+        let nextButton = document.getElementById('SearchNextPageButton');
+        let prevButton = document.getElementById('SearchPrevPageButton');
+        searchGamesPageR = searchGamesPage;
+        searchGamesMaxPageR = searchGamesMaxPage;
+
+        prevButton.hidden = false;
+        nextButton.hidden = false;
+        if (searchGamesPageR === 1){
+            prevButton.hidden = true;
+        }
+        else if (searchGamesPageR === searchGamesMaxPageR){
+            nextButton.hidden = true;
+        }
     }
 
 
     return(
-        <div className="GamesComponent">
+        <div className="GamesComponent border-2 border-gray-500 mx-5">
             <h1>Search Games</h1>
             <div className="GamesSearch">
-                <input type='text' name='latestSearchTitle' value={searchGamesTitle} onChange={HandleSearchGamesTitleChange}/>
-                <select name='platforms' id='platforms' onChange={HandleSearchGamesPlatformChange}>
+                <input type='text' name='gameSearchTitle' className='GamesSearchTitle rounded mr-1 h-6 border-solid border-2 border-gray-400' value={searchGamesTitle} onChange={HandleSearchGamesTitleChange}/>
+                <select name='platforms' id='platforms' className='bg-gray-400 rounded-sm text-center mr-1 h-6' onChange={HandleSearchGamesPlatformChange}>
                     <option value={-1}>All Platforms</option>
                     {
                         platforms.map((todo) => {
@@ -99,7 +128,7 @@ function SearchGames({size = 4}){
                         })
                     }
                 </select>
-                <button onClick={GetSearch}>Search</button>
+                <button onClick={OnClickSubmit} className='bg-gray-500 rounded-sm border-s-4 border-gray-400 h-6 px-2 text-center'>Search</button>
             </div>
             <div className="GamesCards">
             {
@@ -108,15 +137,20 @@ function SearchGames({size = 4}){
                         <div className="GameCard">
                             <h2 className="GameCardTitle">{todo.name}</h2>
                             <h3 className="GameCardReleaseDate">{todo.released}</h3>
-                            <img className="GameCardImage" src={todo.background_image} alt='GameImg'/>
+                            <img className="GameCardImage self-center" src={todo.background_image} alt='GameImg'/>
                         </div>
                     )
                 })
             }
             </div>
             <div className='GamesSearch'>
-                <button onClick={PreviousPage} id='PreviousPageButton'>{'<'}</button>
-                <button onClick={NextPage} id='NextPageButton'>{'>'}</button>
+                <div>
+                    <button onClick={PreviousPage} id='SearchPrevPageButton' className='GamesPageButton bg-gray-400 rounded px-1 mr-1 text-center'>{'Prev.'}</button>
+                    <button onClick={NextPage} id='SearchNextPageButton' className='GamesPageButton bg-gray-400 rounded px-1 text-center'>{'Next'}</button>
+                </div>
+                <div>
+                    <p>{searchGamesPage} out of {searchGamesMaxPage}</p>
+                </div>
             </div>
         </div>
     )

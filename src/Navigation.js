@@ -20,16 +20,16 @@ export default function Navigation() {
     // The navigation bar will look nicer, darker and closed up in comparison.
     return(
         <BrowserRouter>
-            <nav className="Navigation">
+            <nav className="Navigation bg-slate-800 ">
                 <div className='NavigationTitle'>
-                    <h1>R.A.D.S</h1>
+                    <h1 className='NavigationTitle'>R.A.D.S</h1>
                 </div>
-                <div className='NavigationButtonsDiv'>
-                    <Link to='/'><button className="NavigationButton">Home</button></Link>
-                    <Link to='/Movies'><button className="NavigationButton">Movies</button></Link>
-                    <Link to='/Music'><button className="NavigationButton">Music</button></Link>
-                    <Link to='/Games'><button className="NavigationButton">Games</button></Link>
-                    <Link to='/Books'><button className="NavigationButton">Books</button></Link>
+                <div className='NavigationButtonsDiv bg-slate-700'>
+                    <Link to='/'><button className="NavigationButton bg-gray-500 w-20 h-6 rounded">Home</button></Link>
+                    <Link to='/Movies'><button className="NavigationButton bg-gray-500 w-20 h-6 rounded">Movies</button></Link>
+                    <Link to='/Music'><button className="NavigationButton bg-gray-500 w-20 h-6 rounded">Music</button></Link>
+                    <Link to='/Games'><button className="NavigationButton bg-gray-500 w-20 h-6 rounded">Games</button></Link>
+                    <Link to='/Books'><button className="NavigationButton bg-gray-500 w-20 h-6 rounded">Books</button></Link>
                 </div>
             </nav>
             <Routes className='DefaultWebsiteStyle'>

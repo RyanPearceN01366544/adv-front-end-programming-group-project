@@ -1,29 +1,31 @@
 .Navigation{
-    padding-bottom: 10px;
-    background-color: blue;
+    display: flex;
+    flex-grow: 0;
+    position: fixed;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 10px;
+    left: 0;
+    right: 0;
+    height:auto;
 }
 
 .NavigationTitle{
     color: white;
-    font-size:x-large;
-    padding-top: 1rem;
+    font-size:30px;
 }
 
 .NavigationButtonsDiv{
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: space-evenly;
-    margin-left: 5%;
-    margin-right: 5%;
-    padding-top: 1%;
-    padding-bottom: 1%;
-    background-color: red;
+    justify-content: space-between;
+    padding: 1%;
+    min-width: 25%;
 }
 
-.NavigationButton{
+.NavigationButton {
     color:white;
-    background-color: black;
-    width: auto;
-    height: fit-content;
+    margin: 1%;
+    height:auto;
 }

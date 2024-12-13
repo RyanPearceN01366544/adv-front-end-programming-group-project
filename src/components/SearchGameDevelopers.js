@@ -104,7 +104,7 @@ function SearchDevelopers({size = 9}){
         <div className="GamesComponent border-2 border-gray-500 mx-5">
             <u className="GamesComponentTitle">Game Developers</u>
             <div className="GamesSearch">
-                <input type='text' name='gameSearchTitle' className='GamesSearchTitle rounded mr-1 h-6 border-solid border-2 border-gray-400' value={developersSearchTitle} onChange={HandleDevelopersSearchTitleChange} onKeyUp={OnSearchInputKeyUp}/>
+                <input type='text' name='gameSearchTitle' className='bg-gray-500 rounded mr-1 h-6 border-solid border-2 border-gray-400' value={developersSearchTitle} onChange={HandleDevelopersSearchTitleChange} onKeyUp={OnSearchInputKeyUp}/>
                 <button onClick={OnClickSubmit} className='bg-gray-500 rounded-sm border-s-4 border-gray-400 h-6 px-2 text-center'>Search</button>
             </div>
             <div className="GamesCards">

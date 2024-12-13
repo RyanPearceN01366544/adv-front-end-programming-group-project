@@ -1,6 +1,6 @@
 export default function Home(){
     return(
-        <div>
+        <div className="bg-gray-500">
             <h1>Home</h1>
             <h1 className='text-lg'>Welcome to our Group Website!</h1>
             <p className='text-wrap my-5'>

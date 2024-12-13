@@ -126,8 +126,8 @@ function SearchGames({size = 4}){
         <div className="GamesComponent border-2 border-gray-500 mx-5">
             <u className="GamesComponentTitle">Search Games</u>
             <div className="GamesSearch">
-                <input type='text' name='gameSearchTitle' value={searchGamesTitle} onChange={HandleSearchGamesTitleChange} onKeyUp={OnSearchInputKeyUp} id='GamesSearchInputField' className='GamesSearchTitle bg-gray-400 rounded mr-1 h-6 border-solid border-2 border-gray-400'/>
-                <select name='platforms' id='platforms' className='bg-gray-400 rounded-sm text-center mr-1 h-6' onChange={HandleSearchGamesPlatformChange}>
+                <input type='text' name='gameSearchTitle' value={searchGamesTitle} onChange={HandleSearchGamesTitleChange} onKeyUp={OnSearchInputKeyUp} id='GamesSearchInputField' className='bg-gray-500 rounded mr-1 h-6 border-solid border-2 border-gray-400'/>
+                <select name='platforms' id='platforms' className='bg-gray-500 rounded-sm text-center mr-1 h-6' onChange={HandleSearchGamesPlatformChange}>
                     <option value={-1}>All Platforms</option>
                     {
                         platforms.map((todo) => {

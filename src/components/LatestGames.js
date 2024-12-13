@@ -108,7 +108,7 @@ function LatestGames({size = 4}){
         <div className="GamesComponent border-2 border-gray-500 mx-5 mb-4">
             <u className="GamesComponentTitle">Latest Games</u>
             <div className="GamesSearch">
-                <select name='platforms' id='platforms' className='bg-gray-400 rounded-sm text-center mr-1 h-6' onChange={HandleLatestGamesPlatformChange}>
+                <select name='platforms' id='platforms' className='bg-gray-500 rounded-sm text-center mr-1 h-6' onChange={HandleLatestGamesPlatformChange}>
                     <option value={-1}>All Platforms</option>
                     {
                         platforms.map((todo) => {

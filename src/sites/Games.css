@@ -51,7 +51,7 @@
 }
 .GameCardTitle{
     font-size: 1.25vw;
-    text-wrap: nowrap;
+    text-wrap: wrap;
 }
 
 .GameCardImage{

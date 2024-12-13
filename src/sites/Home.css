@@ -1,0 +1,22 @@
+.HomeBackground{
+    color: white;
+    width: 100vw;
+    height: 100vh;
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
+.HomeSections{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+.HomeSection{
+    width: 40%;
+    height: auto;
+}
+.HomeTitleText{
+    font-size: 24px;
+}
+.HomePortals{
+    width: 100%;
+}

@@ -15,6 +15,9 @@ const GamesC = () => <Games/>
 const BooksC = () => <Books/>
 const NotFoundC = () => <NotFound/>
 
+export const normalNavButton = 'NavigationButton bg-gray-500 w-20 h-6 rounded';
+export const activeNavButton = 'NavigationButton bg-blue-500 w-20 h-6 rounded';
+
 export default function Navigation() {
     document.title = "R.A.D.S";
     const [currentActiveButton, setCurrentActiveButton] = useState();
@@ -59,12 +62,9 @@ export default function Navigation() {
         if (currentActiveButton !== undefined){
             currentActiveButton.className = normalNavButton;
         }
-        console.log(`You have clicked the ${event.target.innerHTML} button!`)
         setCurrentActiveButton(event.target);
         event.target.className = activeNavButton;
     }
-    const normalNavButton = 'NavigationButton bg-gray-500 w-20 h-6 rounded';
-    const activeNavButton = 'NavigationButton bg-blue-500 w-20 h-6 rounded';
 
     return(
         <BrowserRouter>

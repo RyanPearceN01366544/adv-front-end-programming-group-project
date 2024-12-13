@@ -7,11 +7,11 @@ const genres =  ['All Movies','Action','Animation', 'Comedy', 'Drama', 'Horror',
     return (
         <aside className="sidebar">
             <h2 className="sidebar-title">Genres</h2>
-            <ul className="category-list">
+            <ul>
                 {genres.map((genre) => (
                  <li
                  key={genre}
-                 className={`category-item ${selectedGenre === genre ? 'active' : ''}`}
+                 className={selectedGenre === genre ? 'selected' : ''}
                  onClick={() => onGenreClick(genre)}>
                     {genre}
 </li>   
@@ -19,6 +19,6 @@ const genres =  ['All Movies','Action','Animation', 'Comedy', 'Drama', 'Horror',
             </ul>
         </aside>
     );
-};
+}
 
 export default Sidebar;

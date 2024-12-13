@@ -1,0 +1,47 @@
+.Navigation_OLD{
+    display: flex;
+    flex-grow: 0;
+    position: fixed;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    left: 0;
+    right: 0;
+    height:auto;
+}
+
+.Navigation{
+    position: sticky;
+    top: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 2.5rem;
+}
+
+.NavigationTitle{
+    color: white;
+    font-size:32px;
+    margin-left: 0.5rem;
+    align-self: center;
+}
+
+.NavigationButtonsDiv{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    column-gap: 1rem;
+    justify-content: center;
+    align-content: center;
+    height: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.NavigationButton {
+    color:white;
+    margin: 1%;
+    height:auto;
+}

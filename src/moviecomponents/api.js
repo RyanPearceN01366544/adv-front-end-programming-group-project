@@ -25,6 +25,7 @@ export const fetchMoviesByGenre = async (genre) => {
 
             const detailedMovies = await Promise.all(moviePromises);
 
+if (genre === 'All Movies') return detailedMovies;
             return detailedMovies.filter((movie) =>
         movie.Genre?.toLowerCase().includes(genre.toLowerCase())
             );

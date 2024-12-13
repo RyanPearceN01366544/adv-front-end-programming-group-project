@@ -1,28 +1,28 @@
-import '../App.css';
-import React, { useState, useEffect } from 'react';
-import SearchBar from '../moviecomponents/searchbar';
+import { useState, useEffect } from 'react';
 import Sidebar from '../moviecomponents/sidebar';
+import SearchBar from '../moviecomponents/searchbar';
 import MovieGrid from '../moviecomponents/moviegrid';
-import { fetchMoviesByTitle, fetchMoviesByGenre } from '../moviecomponents/api';
+import { fetchMoviesByGenre, fetchMoviesByTitle } from '../moviecomponents/api';
 
-
-export default function Movies(){
+function Movies() {
     const [movies, setMovies] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [selectedGenre, setSelectedGenre] = useState('All Movies');
+    const [selectedGenre, setSelectedGenre] = useState('');
   
     useEffect(() => {
-      const fetchDefaultMovies = async () => {
+      const fetchMovies = async () => {
+       if (selectedGenre) {
         setLoading(true);
         const data = await fetchMoviesByGenre(selectedGenre);
         setMovies(data);
         setLoading(false);
+       }
       };
   
-      fetchDefaultMovies();
+      fetchMovies();
     }, [selectedGenre]);
   
-    const handleSearch = async (title) =>{
+    const handleSearch = async (title) => {
       setLoading(true);
       const data = await fetchMoviesByTitle(title);
       setMovies(data);
@@ -30,21 +30,22 @@ export default function Movies(){
     };
   
     const handleGenreClick = async (genre) => {
-    setSelectedGenre(genre);
-    setLoading(true);
-    const data = await fetchMoviesByGenre(genre);
-    setMovies(data);
-    setLoading(false);
+      setSelectedGenre(genre);
     };
 
     return(
-        <div className="app-main">
-            <Sidebar onGenreClick={handleGenreClick}
-            selectedGenre={selectedGenre}/>
-            <div className="content-area">
-                <SearchBar onSearch={handleSearch} />
-                <MovieGrid movies={movies} loading={loading}/>
-            </div>
+        <div>
+            <div className="app-main">
+        <Sidebar onGenreClick={handleGenreClick}
+        selectedGenre={selectedGenre}/>
+        <div className="content-area">
+          <SearchBar onSearch={handleSearch} />
+          <MovieGrid movies={movies} loading={loading}/>
+        </div>
       </div>
-    )
-}
+            <h1>Movies</h1>
+        </div>
+    );
+    }
+
+    export default Movies;

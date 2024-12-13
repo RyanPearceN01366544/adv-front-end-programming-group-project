@@ -43,15 +43,15 @@
     column-count: 1;
     column-gap: 1rem;
     justify-content: center;
+    background-color: var(--dark5);
     border: 3px solid var(--dark2);
     padding-left: 1rem;
     padding-right: 1rem;
     margin-bottom: 1rem;
 }
 .GameCardTitle{
-    font-size: 0.8vw;
-    text-wrap: nowrap;
-    
+    font-size: 1.25vw;
+    text-wrap: wrap;
 }
 
 .GameCardImage{
@@ -65,15 +65,6 @@
     margin: auto;
     margin-bottom: 0.75rem;
     border: 5px solid var(--dark1);
-}
-.GamesSearchTitle{
-    color: black;
-}
-.GamesSearchPlatform{
-    color: black;
-}
-.GamesPageButton{
-    color: black;
 }
 
 @media (min-width: 600px){

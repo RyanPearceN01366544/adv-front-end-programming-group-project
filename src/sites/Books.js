@@ -1,7 +1,7 @@
 import {useState, useEffect} from 'react';
 
 export default function Books(){
-    const [wtrBooksSite, setwtrBooksSite] = useState = ("https://openlibrary.org/people/mekBot/books/want-to-read.json") 
+    const [wtrBooksSite, setwtrBooksSite] = useState("https://openlibrary.org/people/mekBot/books/want-to-read.json") 
     const [wtrBooksData, setWtrBooksData] = useState([]);
     const [work, setWork] = useState ([]);
     const [wtrBooksWork, setWtrBooksWork] = useState(-1); 

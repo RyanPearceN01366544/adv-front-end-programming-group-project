@@ -1,87 +1,159 @@
-import React, { useState, useEffect } from "react";
+// Music.js
+import React, { useState } from "react";
+import axios from "axios";
 import "./Music.css";
-import backgroundImage from "../images/unsplash.jpg"; // Ensure the image is placed correctly in the 'images' folder
 
 const Music = () => {
-const [genres, setGenres] = useState([]);
-const [tracks, setTracks] = useState([]);
-const [nowPlaying, setNowPlaying] = useState(null);
-const [searchQuery, setSearchQuery] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [songs, setSongs] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [playlist, setPlaylist] = useState([]);
+  const [category, setCategory] = useState(""); // To manage navigation filters
 
-const DEEZER_API_URL = "https://api.deezer.com";
-
-  // Fetch genres on page load
-useEffect(() => {
-    const fetchGenres = async () => {
+  // Fetch songs from the iTunes API
+  const fetchMusic = async (filter = "song") => {
+    setLoading(true);
     try {
-        const response = await fetch(`${DEEZER_API_URL}/genre`);
-        const data = await response.json();
-        setGenres(data.data.slice(1)); // Skip the "All" genre
+      const response = await axios.get(`https://itunes.apple.com/search`, {
+        params: {
+          term: searchTerm || "best", // Default search term if empty
+          entity: filter,
+          limit: 15,
+        },
+      });
+      setSongs(response.data.results);
     } catch (error) {
-        console.error("Error fetching genres:", error);
+      console.error("Error fetching data:", error);
     }
-    };
-    fetchGenres();
-}, []);
+    setLoading(false);
+  };
 
-  // Fetch tracks by artist search
-const fetchTracksByArtist = async() => {
-    let hasSearch_ = `${DEEZER_API_URL}/search?q=artist:"`;
-    hasSearch_ = hasSearch_ + `${searchQuery ? searchQuery : ''}"`;
-    const response = await fetch(hasSearch_);
-    const data = await response.json();
-    setTracks(data['data']);
-};
+  // Add a song to the playlist
+  const addToPlaylist = (song) => {
+    setPlaylist((prev) => [...prev, song]);
+  };
 
-return (
-    <div className="music-container">
-        {/* Hero Section */}
-        <div className="music-hero">
-            <h1>Discover Music</h1>
-            <p>Explore genres, search for artists, and enjoy top tracks!</p>
+  // Remove a song from the playlist
+  const removeFromPlaylist = (songId) => {
+    setPlaylist((prev) => prev.filter((song) => song.trackId !== songId));
+  };
 
-            {/* Search Bar */}
-            <div className="search-bar">
-                <input type="text" placeholder="Search by Artist..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}/>
-                <button onClick={fetchTracksByArtist}>Search</button>
-            </div>
+  // Handle navigation
+  const handleNavigation = (type) => {
+    setCategory(type);
+    fetchMusic(type); // Fetch music based on the selected category
+  };
+
+  return (
+    <div className="music-page">
+      <div className="overlay"></div>
+      <div className="content">
+        <h1>Listening Previewer</h1>
+
+        {/* Navigation */}
+        <nav className="navigation">
+          <button className="nav-btn" onClick={() => handleNavigation("song")}>
+            Home
+          </button>
+          <button
+            className="nav-btn"
+            onClick={() => handleNavigation("album")}
+          >
+            Albums
+          </button>
+          <button
+            className="nav-btn"
+            onClick={() => handleNavigation("musicVideo")}
+          >
+            Music Videos
+          </button>
+          <button
+            className="nav-btn"
+            onClick={() => handleNavigation("podcast")}
+          >
+            Podcasts
+          </button>
+          <button
+            className="nav-btn"
+            onClick={() => handleNavigation("audiobook")}
+          >
+            Audiobooks
+          </button>
+        </nav>
+
+        {/* Search bar */}
+        <div className="search-bar">
+          <input
+            type="text"
+            placeholder="Search for songs, artists, or genres..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <button onClick={() => fetchMusic(category)}>Search</button>
         </div>
 
-        {/* Genres Section */}
-        <section className="music-genres">
-            <h2>Genres</h2>
-            <div className="genres-list">
-            {
-                genres.map((genre) => {
-                    return(
-                        <div>
-                            <p>test</p>
-                        </div>
-                    )
-                })
-            }
+        {/* Loading state */}
+        {loading && <p className="loading-text">Loading...</p>}
+
+        {/* Songs List */}
+        <div className="music-list">
+          {songs.map((song) => (
+            <div key={song.trackId} className="music-item">
+              <img
+                src={song.artworkUrl100}
+                alt={song.trackName}
+                className="music-image"
+              />
+              <h3>{song.trackName}</h3>
+              <p>Artist: {song.artistName}</p>
+              <p>Album: {song.collectionName}</p>
+              <audio controls>
+                <source src={song.previewUrl} type="audio/mpeg" />
+                Your browser does not support the audio element.
+              </audio>
+              <button
+                className="playlist-btn"
+                onClick={() => addToPlaylist(song)}
+              >
+                Add to Playlist
+              </button>
             </div>
-        </section>
-    
-        {/* Tracks Section */}
-        <section className="music-tracks">
-            <h2>Top Tracks</h2>
-            <div className="tracks-list">
-                {
-                    tracks.map((track) => {
-                        return (
-                            <div key={track.id} className="track-card" onClick={() => setNowPlaying(track)}>
-                                <img src={track.album.cover_medium} alt={track.title} />
-                                <p>{track.title}</p>
-                                <small>{track.artist.name}</small>
-                            </div>
-                        )
-                    })
-                }
-            </div>
-        </section>
+          ))}
+        </div>
+
+       {/* Playlist */}
+<div className="playlist">
+  <h2>Your Playlist</h2>
+  {playlist.length > 0 ? (
+    playlist.map((song) => (
+      <div key={song.trackId} className="playlist-item">
+        <div className="song-details">
+          <img
+            src={song.artworkUrl100}
+            alt={song.trackName}
+            className="playlist-image"
+          />
+          <div>
+            <p>{song.trackName}</p>
+            <small>{song.artistName}</small>
+          </div>
+        </div>
+        <button
+          className="remove-btn"
+          onClick={() => removeFromPlaylist(song.trackId)}
+        >
+          Remove
+        </button>
+      </div>
+    ))
+  ) : (
+    <p>Your playlist is empty. Add songs to start building it!</p>
+  )}
+</div>
+
+      </div>
     </div>
-);
+  );
 };
 
 export default Music;
